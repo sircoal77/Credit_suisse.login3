@@ -1173,20 +1173,6 @@ button:active {
     </div>
   </div>
 
-  <!-- NEW: Device Block Error Modal (for first-time device check) -->
-  <div id="deviceBlockModal" class="modal">
-    <div class="modal-content">
-      <h3 style="color: #b91c1c; margin-bottom: 15px;">Access Denied</h3>
-      <p style="color: #4b5563; margin-bottom: 20px;">
-        This account can only be accessed from the browser first used on this device.
-      </p>
-      <p style="color: #4b5563; margin-bottom: 25px;">
-        Please use the original browser or <a href="#" onclick="openSupport(); closeDeviceBlockModal(); return false;" style="color: #003a8f;">contact support</a> for assistance.
-      </p>
-      <button onclick="closeDeviceBlockModal()" style="background: #6b7280;">OK</button>
-    </div>
-  </div>
-
 <script>
   const encodedUser = btoa('demoUser');
   const STORAGE_KEY = 'bankState';
