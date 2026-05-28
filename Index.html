@@ -1336,11 +1336,6 @@ button:active {
     }, 2000);
   }
 
-  // Device block modal functions
-  function closeDeviceBlockModal() {
-    document.getElementById('deviceBlockModal').classList.remove('show');
-  }
-
   // Check pending transactions (test: 5 minutes)
 function checkPendingTransactions() {
   const saved = localStorage.getItem('transactions');
