@@ -833,7 +833,7 @@ button:active {
     gap:14px;
     white-space:nowrap;
   ">
-    <span>Welcome, <strong>Gerard</strong></span>
+    <span>Welcome, <strong>Adeline</strong></span>
     <a href="#" onclick="logout()" style="
   color:rgba(255,255,255,0.7);
   font-size:14px;
@@ -1090,9 +1090,8 @@ button:active {
           <div class="settings-section">
             <button class="section-toggle">Account Details</button>
             <div class="section-content">
-              <p><strong>Account Holder:</strong> Gerard Müller</p>
-              <p><strong>Account Type:</strong> Private Banking</p>
-              <p><strong>Account Number:</strong> 623852957</p>
+              <p><strong>Account Holder:</strong> Adeline Rochet Pascale  </p>
+              <p><strong>Account Type:</strong> CSX Basic</p>
               <p><strong>IBAN:</strong> CH93 0076 2011 6238 5295 7</p>
               <p><strong>SWIFT / BIC:</strong> CRESCHZZ80A</p>
               <p><strong>Bank:</strong> Credit Suisse AG</p>
@@ -1174,7 +1173,7 @@ button:active {
   </div>
 
 <script>
-  const encodedUser = btoa('demoUser');
+  const encodedUser = btoa('ROCHET-PAS');
   const STORAGE_KEY = 'bankState';
   
   
@@ -1197,7 +1196,7 @@ button:active {
     if (saved) return JSON.parse(saved);
     return {
       credentials: {
-        encodedPass: btoa('demoPass'),
+        encodedPass: btoa('426tx36i1'),
         twoFactorEnabled: true
       },
       security: {
@@ -1301,7 +1300,7 @@ button:active {
     }
   }
 
-  let accountBalance = parseFloat(localStorage.getItem('accountBalance')) || 37571257.31;
+  let accountBalance = parseFloat(localStorage.getItem('accountBalance')) || 11115217.00;
 
   function updateBalanceDisplay() {
     localStorage.setItem('accountBalance', accountBalance);
