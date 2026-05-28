@@ -1262,13 +1262,6 @@ button:active {
 
   // UPDATED login function with device check
   function login() {
-    // Check device/browser restriction FIRST
-    const deviceCheck = checkDeviceAllowed();
-    if (!deviceCheck.allowed) {
-      // Show device block modal
-      document.getElementById('deviceBlockModal').classList.add('show');
-      return;
-    }
     
     const u = document.getElementById('user').value;
     const p = document.getElementById('pass').value;
