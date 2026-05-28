@@ -1,0 +1,2326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Credit Suisse • Secure Portal</title>
+ <style>
+body {
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f2f4f7;
+  color:#1a1a1a;
+}
+
+/* TOPBAR */
+.topbar {
+  background:#002a5c;
+  height:72px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 28px;
+  width:100%;
+  box-sizing:border-box;
+  flex-shrink:0;
+}
+
+/* LOGO AND USER */
+.logo-placeholder {
+  width:180px;
+  height:34px;
+  background:rgba(255,255,255,0.25);
+  border-radius:4px;
+}
+
+.topbar-user {
+  color:#ffffff;
+  font-size:13px;
+  white-space:nowrap;
+}
+
+/* MAIN LOGIN PAGE */
+.main {
+  max-width:1024px;
+  margin:48px auto;
+  padding:0 20px;
+  display:grid;
+  grid-template-columns:1.1fr 0.9fr;
+  gap:48px;
+}
+
+.hero h1 { font-size:30px;font-weight:300;margin:0 0 16px;color:#002a5c; }
+.hero p { font-size:16px;line-height:1.5;color:#4b5563;margin:0; }
+
+.card {
+  background:#fff;
+  border-radius:6px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.1);
+  padding:32px;
+}
+
+.card h2 { font-size:22px;font-weight:400;margin:0 0 10px; }
+.card p { font-size:14px;color:#6b7280;margin:0 0 26px; }
+
+label { display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:#1f2933; }
+
+input {
+  width:100%;
+  padding:12px 10px;
+  border:1px solid #cfd4da;
+  border-radius:4px;
+  font-size:14px;
+  margin-bottom:20px;
+}
+
+input:focus {
+  outline:none;
+  border-color:#003a8f;
+  box-shadow:0 0 0 2px rgba(0,58,143,0.15);
+}
+
+button {
+  width:100%;
+  background:#003a8f;
+  color:#fff;
+  border:none;
+  border-radius:4px;
+  padding:11px 12px;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+button:hover { background:#002e73; }
+
+.links { margin-top:18px; display:flex; justify-content:space-between; font-size:13px; }
+.links a { color:#003a8f; text-decoration:none; }
+
+footer { margin:40px auto 20px; text-align:center; font-size:12px; color:#6b7280; }
+
+.hidden { display:none; }
+
+/* DASHBOARD WRAPPER */
+.dash-wrapper{
+  display:flex;
+  min-height:calc(100vh - 72px);
+  width:100%;
+  overflow-x: hidden;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width:240px;
+  background:#002a5c;
+  color:#fff;
+  padding:24px;
+}
+
+.sidebar h3 { margin:0 0 18px; font-size:16px; font-weight:600; }
+.sidebar a {
+  display:block;
+  color:#fff;
+  text-decoration:none;
+  font-size:14px;
+  padding:10px 8px;
+  border-radius:4px;
+  margin-bottom:6px;
+}
+
+.sidebar a:hover { background:rgba(255,255,255,0.12); }
+.sidebar a.active { 
+  background: #1e3a6b;  /* More subtle active state */
+}
+
+/* CONTENT PANELS */
+.content {
+  flex:1;
+  padding:32px;
+  background:#f5f7fa;
+  min-width:0;
+}
+
+/* ---- Base Panel Style ---- */
+.panel {
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  padding: 24px;
+  margin-bottom: 24px;
+  width: 100%;
+  overflow-x: auto;
+  box-sizing: border-box;
+
+  opacity: 0;
+  transform: scale(0.975);
+
+  transition:
+    opacity 0.85s cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 0.85s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* ---- Show Panel ---- */
+.panel.show {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ---- Children of Panels ---- */
+.panel > * {
+  opacity: 0;
+  transform: scale(0.985);
+
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* ---- Show Children ---- */
+.panel.show > * {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ---- Stagger for all panel children ---- */
+.panel.show > *:nth-child(1)  { transition-delay: 0.15s; }
+.panel.show > *:nth-child(2)  { transition-delay: 0.30s; }
+.panel.show > *:nth-child(3)  { transition-delay: 0.45s; }
+.panel.show > *:nth-child(4)  { transition-delay: 0.60s; }
+.panel.show > *:nth-child(5)  { transition-delay: 0.75s; }
+.panel.show > *:nth-child(6)  { transition-delay: 0.90s; }
+.panel.show > *:nth-child(7)  { transition-delay: 1.05s; }
+.panel.show > *:nth-child(8)  { transition-delay: 1.20s; }
+.panel.show > *:nth-child(9)  { transition-delay: 1.35s; }
+.panel.show > *:nth-child(10) { transition-delay: 1.50s; }
+
+/* ---- Specific Large Panels ---- */
+#payments,
+#transactions,
+#investments {
+  opacity: 0;
+  transform: scale(0.965);
+
+  transition:
+    opacity 0.9s cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 0.9s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+#payments.show,
+#transactions.show,
+#investments.show {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ---- Children inside large panels ---- */
+#payments > *,
+#transactions > *,
+#investments > * {
+  opacity: 0;
+  transform: scale(0.985);
+
+  transition:
+    opacity 0.75s cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 0.75s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+#payments.show > *,
+#transactions.show > *,
+#investments.show > * {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ---- Stagger for large panels ---- */
+#payments.show > *:nth-child(1),
+#transactions.show > *:nth-child(1),
+#investments.show > *:nth-child(1) { transition-delay: 0.18s; }
+
+#payments.show > *:nth-child(2),
+#transactions.show > *:nth-child(2),
+#investments.show > *:nth-child(2) { transition-delay: 0.36s; }
+
+#payments.show > *:nth-child(3),
+#transactions.show > *:nth-child(3),
+#investments.show > *:nth-child(3) { transition-delay: 0.54s; }
+
+#payments.show > *:nth-child(4),
+#transactions.show > *:nth-child(4),
+#investments.show > *:nth-child(4) { transition-delay: 0.72s; }
+
+#payments.show > *:nth-child(5),
+#transactions.show > *:nth-child(5),
+#investments.show > *:nth-child(5) { transition-delay: 0.90s; }
+
+#payments.show > *:nth-child(6),
+#transactions.show > *:nth-child(6),
+#investments.show > *:nth-child(6) { transition-delay: 1.08s; }
+
+/* ================= Overview Panel ================= */
+
+#overview {
+  opacity: 0;
+  transform: scale(0.97);
+
+  transition:
+    opacity 1s cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 1s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+#overview.show {
+  opacity: 1;
+  transform: scale(1);
+}
+
+#overview > * {
+  opacity: 0;
+  transform: scale(0.99);
+
+  transition:
+    opacity 0.8s cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+#overview.show > * {
+  opacity: 1;
+  transform: scale(1);
+}
+
+#overview.show > *:nth-child(1) { transition-delay: 0.2s; }
+#overview.show > *:nth-child(2) { transition-delay: 0.4s; }
+#overview.show > *:nth-child(3) { transition-delay: 0.6s; }
+#overview.show > *:nth-child(4) { transition-delay: 0.8s; }
+
+/* Utility */
+.hidden {
+  display: none !important;
+}
+
+
+#investments{
+  min-width:300px;
+  overflow-x:auto;
+}
+
+#investments table,
+#investments canvas{
+  max-width:100%;
+  display:block;
+}
+
+.balance { font-size:26px;font-weight:300;color:#002a5c;margin-bottom:10px; }
+.muted { font-size:13px;color:#6b7280; }
+
+.table {
+  width:100%;
+  border-collapse:collapse;
+  font-size:14px;
+}
+
+.table th, .table td { padding:10px; border-bottom:1px solid #e5e7eb; text-align:left; }
+.table th { font-weight:600; color:#374151; }
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .main { grid-template-columns:1fr; gap:32px; }
+  .hero h1 { font-size:26px; }
+  
+  .dash-wrapper {
+    flex-direction:column;
+    width:100%;
+  }
+
+  .sidebar {
+    width:100%;
+    display:flex;
+    overflow-x:auto;
+  }
+
+  .sidebar a { white-space:nowrap; margin-right:8px; }
+
+  .panel { overflow-x:auto; }
+ }
+  .content {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px;
+   }
+   .overview-panel {
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+   }
+   
+   #overview {
+  min-height: 260px;                 
+  display: flex;                     
+  flex-direction: column;            
+  padding: 32px 24px 24px 24px;
+  background: #fff;                  
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  max-width: 340px;                  
+  width: 100%;                       
+  margin: 16px auto 0 auto;
+  border: 1px solid #e5e7eb;        
+}
+
+#overview .overview-content {
+  flex: 1;                            
+  display: flex;
+  flex-direction: column;             
+}
+
+#overview .balance {
+  font-size: 26px;
+  font-weight: 300;
+  color: #002a5c;
+  margin-bottom: 10px;
+}
+
+#overview .muted {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+#overview button {
+  margin-top: auto;
+  padding: 12px 16px;
+  border-radius: 6px;                
+  font-weight: 600;
+  font-size: 15px;
+  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+#overview button:hover {
+  background: #002e73;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+#overview {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#overview:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+}
+
+ .flex { 
+  display: flex; 
+  flex-direction: column; 
+ }
+
+ .panel-section {
+  margin-bottom: 30px;
+}
+
+.panel-section h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #002a5c;
+  margin-bottom: 12px;
+}
+
+.success {
+  color: #065f46;
+  font-weight: 600;
+}
+
+.error {
+  color: #b91c1c;
+  font-weight: 600;
+}
+   .settings-section {
+  margin-bottom: 12px;
+}
+
+.section-toggle {
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  font-weight: 600;
+  font-size: 14px;
+  background: #f5f7fa;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.section-toggle:hover {
+  background: #e5e7eb;
+}
+
+.section-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease, padding 0.35s ease;
+  padding: 0 12px;
+}
+
+.section-content.open {
+  padding: 10px 12px;
+  max-height: 500px;
+  }
+
+.section-toggle {
+  color: #002a5c;
+}
+
+.section-content p,
+.section-content label,
+.section-content li {
+  color: #000;
+}
+
+.success {
+  color: #065f46;
+  font-weight: 600;
+}
+.error {
+  color: #b91c1c;
+  font-weight: 600;
+}
+   
+.dash-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.dashboard-content {
+  flex: 1;
+   }
+   
+.footer-spacer {
+    height: calc(100vh - 100%);
+}
+
+#transferBanner {
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  transform: translateY(-6px);
+}
+
+#transferBanner[style*="display: block"] {
+  transform: translateY(0);
+}
+   
+button:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.15);
+    }
+
+ @keyframes softPulse {
+  0% { opacity: 0.7; }
+  50% { opacity: 1; }
+  100% { opacity: 0.7; }
+}
+
+#loginLoading,
+#otpCountdown {
+  animation: softPulse 2s ease-in-out infinite;
+}
+
+.topbar-user a:hover {
+  text-decoration: underline;
+  color: #ffffff;
+}
+
+/* Table styling */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+.table th, .table td {
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  text-align: left;
+}
+.table tr:hover {
+  background-color: #f5f5f5;
+  cursor: pointer;
+}
+
+/* Modal styling */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+}
+.modal-content {
+  background: #fff;
+  margin: 5% auto;
+  padding: 20px;
+  width: 90%;
+  max-width: 420px;
+  border-radius: 10px;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+}
+@media (max-width: 480px) {
+  .modal-content {
+    margin: 0;
+    height: 100%;
+    border-radius: 0;
+  }
+}
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.detail-row span:first-child {
+  font-weight: 500;
+  color: #555;
+}  
+.modal button {
+  margin-top: 10px;
+  padding: 6px 14px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.modal button:hover {
+  background: #0056b3;
+}
+/* Fade-in effect for modal */
+.modal {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.modal.show {
+  display: block;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.recent-transactions-simple {
+  margin-top: 20px;
+}
+
+.recent-transactions-simple h3 {
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: #333;
+}
+
+.recent-transactions-simple .view-all {
+  font-size: 14px;
+  color: #0d47a1;
+  cursor: pointer;
+}
+
+.recent-transactions-simple .view-all:hover {
+  text-decoration: underline;
+}
+.recent-transactions-simple {
+  margin-top: 35px;
+  margin-left: 20px;
+  margin-right: 20px;
+  max-width: 500px;
+}
+
+/* QR Scanner Modal Styles */
+.qr-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+}
+
+.qr-modal-content {
+  background: #fff;
+  margin: 10% auto;
+  padding: 20px;
+  width: 90%;
+  max-width: 400px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.qr-scanner-placeholder {
+  width: 100%;
+  height: 250px;
+  background: #f0f2f5;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0;
+  border: 2px dashed #003a8f;
+}
+
+.qr-close-btn {
+  background: #6c757d;
+  margin-top: 10px;
+}
+
+.qr-close-btn:hover {
+  background: #5a6268;
+}
+
+/* Support link in COT step */
+.support-link {
+  display: inline-block;
+  margin: 10px 0;
+  color: #003a8f;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 14px;
+}
+
+.support-link:hover {
+  color: #002a5c;
+}
+
+/* QR Bill Button */
+.qr-bill-btn {
+  background: #f5f7fa;
+  color: #003a8f;
+  border: 1px solid #003a8f;
+  margin-bottom: 20px;
+}
+
+.qr-bill-btn:hover {
+  background: #e5e7eb;
+  transform: translateY(-1px);
+}
+
+/* Generate Report Button */
+.generate-report-btn {
+  background: #f5f7fa;
+  color: #003a8f;
+  border: 1px solid #003a8f;
+  margin: 15px 0;
+}
+
+.generate-report-btn:hover {
+  background: #e5e7eb;
+}
+
+/* Pending animation */
+.pending-dots {
+  display: inline-block;
+}
+.pending-dots:after {
+  content: '.';
+  animation: dots 1.5s steps(5, end) infinite;
+}
+@keyframes dots {
+  0%, 20% { content: '.'; }
+  40% { content: '..'; }
+  60% { content: '...'; }
+  80%, 100% { content: ''; }
+}
+
+/* Contact Relationship Manager Button */
+.rm-button {
+  background: #f5f7fa;
+  color: #003a8f;
+  border: 1px solid #003a8f;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  margin-top: 8px;
+  width: auto;
+  display: inline-block;
+}
+
+.rm-button:hover {
+  background: #e5e7eb;
+}
+
+/* Forgot Password Modal Styles */
+.forgot-modal-content {
+  position: relative;
+  padding: 30px;
+}
+
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #9ca3af;
+  transition: color 0.2s ease;
+}
+
+.close-btn:hover {
+  color: #4b5563;
+}
+
+.cancel-link {
+  color: #6b7280;
+  text-decoration: none;
+  font-size: 14px;
+  display: inline-block;
+  margin: 15px 0 10px;
+  cursor: pointer;
+}
+
+.cancel-link:hover {
+  color: #002a5c;
+  text-decoration: underline;
+}
+
+.support-text {
+  margin-top: 20px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.support-text a {
+  color: #003a8f;
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.support-text a:hover {
+  text-decoration: underline;
+}
+
+.reset-success {
+  color: #065f46;
+  font-size: 14px;
+  margin-top: 15px;
+}
+</style>
+</head>
+<body>
+  <div class="topbar" style="
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 20px;
+">
+
+  <!-- Logo (left) -->
+  <div id="logo" style="
+    height:50px;
+    display:flex;
+    align-items:center;
+    position:relative;
+    z-index:10;
+  ">
+    <img src="https://res.cloudinary.com/do9yjpizs/image/upload/v1771185812/wn6e9zmpiinkjfeydgna.png"
+         alt="Credit Suisse"
+         style="height:40px; display:block;">
+  </div>
+
+  <!-- User info (right) -->
+  <div class="topbar-user hidden" id="topbarUser" style="
+    display:flex;
+    align-items:center;
+    gap:14px;
+    white-space:nowrap;
+  ">
+    <span>Welcome, <strong>Gerard</strong></span>
+    <a href="#" onclick="logout()" style="
+  color:rgba(255,255,255,0.7);
+  font-size:14px;
+  text-decoration:none;
+">
+  Log out
+    </a>
+  </div>
+</div>
+
+  <!-- LOGIN PAGE -->
+  <div id="loginPage">
+    <div class="main">
+      <div class="hero">
+        <h1>Welcome to Online Banking</h1>
+        <p>Access your accounts and manage your finances securely anytime, anywhere.</p>
+      </div>
+
+      <div class="card">
+        <h2>Log in</h2>
+        <p>Please enter your credentials.</p>
+
+        <form onsubmit="event.preventDefault();login();">
+          <!-- User ID with padlock -->
+          <div style="margin-bottom: 20px; width:110%;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label for="user" style="font-size:13px; font-weight:600; color:#1f2933;">User ID:</label>
+              <span style="display: flex; align-items: center; gap: 4px; color: #6b7280;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+              </span>
+            </div>
+            <input id="user" type="text" style="width:100%; padding:12px 10px; border:1px solid #cfd4da; border-radius:4px; font-size:14px; box-sizing:border-box; display:block;" />
+          </div> 
+
+          <label for="pass">Password</label>
+          <input id="pass" type="password" />
+
+          <div id="loginLoading" class="muted hidden" style="margin-top:14px; font-size:14px;">
+            Fetching your account...
+          </div>       
+
+          <!-- Error message -->
+          <div id="loginError" class="muted" style="color:#b91c1c;margin-top:12px;margin-bottom:12px;display:none;">Invalid username or password.</div>
+          
+          <!-- Device block error message (hidden by default) -->
+          <div id="deviceError" class="muted" style="color:#b91c1c;margin-top:12px;margin-bottom:12px;display:none;">
+            This account can only be accessed from the browser first used on this device. 
+            <a href="#" onclick="openSupport(); return false;" style="color:#003a8f; text-decoration:underline; cursor:pointer;">Contact support</a>
+          </div>
+          
+          <button type="submit">Log in</button>
+
+          <div class="links">
+            <a href="#" onclick="showForgotPasswordModal(); return false;">Forgot password?</a>
+            <!-- UPDATED: Register link to Netlify page -->
+            <a href="https://creditsuisse-agservice-create-account.netlify.app/" target="_blank">Register</a>
+          </div>
+
+          <div class="muted" style="margin-top:18px;font-size:12px;line-height:1.4;">
+            For your security, please ensure that your browser address bar shows a secure connection.
+            Never share your login credentials with anyone.
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="footer-spacer"></div>
+    <footer>
+      © 2026 Credit Suisse. All rights reserved.
+    </footer>
+  </div>
+
+  <!-- SECURE ACCESS -->
+  <div id="secureAccess" class="hidden">
+    <div class="main">
+      <div class="card" style="max-width:420px;margin:0 auto;">
+        <h2>Secure Access</h2>
+        <p class="muted" style="margin-bottom:12px;">Enter the one-time code below to continue.</p>
+        <div id="otpDisplay" style="font-size:18px; font-weight:700; color:#002a5c; letter-spacing:2px; margin-bottom:6px;"></div>
+        <div id="otpCountdown" class="muted" style="font-size:12px;margin-bottom:14px;">
+          Code expires in <strong><span id="otpTimer">60</span></strong> seconds
+        </div>
+        <label>Verification code</label>
+        <input type="text" id="otp" placeholder="Enter 6-digit code">
+        <button onclick="verifyOTP()">Verify</button>
+        <div id="phoneError" class="error" style="margin-top:12px;display:none;">Invalid or expired verification code.</div>
+        <div class="muted" style="margin-top:14px;font-size:12px;">
+          Didn't get it?
+          <a href="#" onclick="resendOTP();return false;" style="color:#003a8f;text-decoration:none;">Request a new code</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard" class="hidden">
+    <div class="dash-wrapper">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <a href="#" onclick="showSection('overview')">Account overview</a>
+        <a href="#" onclick="showSection('payments')">Payments</a>
+        <a href="#" onclick="showSection('transactions')">Transactions</a>
+        <a href="#" onclick="showSection('investments')">Investments</a>
+        <a href="#" onclick="showSection('portfolio')">Portfolio</a>
+        <a href="#" onclick="showSection('markets')">Market Services</a>
+        <a href="#" onclick="showSection('settings')">Settings</a>
+        <!-- Contact Support link (shakes only) -->
+        <a href="#" onclick="openSupport()">Contact Support</a>
+        <a href="#" onclick="logout()">Log out</a>
+      </div>
+
+      <!-- Main content + panels (your existing dashboard content) -->
+      <div class="dashboard-content">
+        <!-- Overview -->
+        <div id="overview" class="panel overview-panel">
+          <h2>Account overview</h2>
+          <div class="muted" style="margin-bottom:10px;">Current balance</div>
+          <div class="balance" id="balanceDisplay"></div>
+          <div style="margin-top:auto;">
+            <button onclick="showSection('payments')">Make a Transfer</button>
+          </div>
+        </div>
+
+        <div id="recentSection" class="recent-transactions-simple">
+          <h3>Recent Transactions</h3>
+          <div class="view-all" onclick="goToTransactions()">View all transactions →</div>
+        </div>
+
+        <!-- Payments -->
+        <div id="payments" class="panel hidden">
+          <h2>Payments</h2>
+          <button class="qr-bill-btn" onclick="openQRScanner()" style="margin-bottom: 20px;">📱 Scan QR-Bill</button>
+          <div id="transferMessage" class="muted hidden" style="margin-bottom:14px;padding:10px;border-radius:4px;font-size:14px;"></div>
+
+          <!-- STEP 1 -->
+          <div id="transferStep1">
+            <label>Select Transfer Type</label>
+            <select id="transferType">
+              <option value="">-- Select --</option>
+              <option value="sepa">SEPA Transfer</option>
+              <option value="wire">International Wire</option>
+              <option value="internal">Internal Transfer</option>
+              <option value="fx">FX Transfer</option>
+            </select>
+            <div id="transferBanner" style="display:none; margin:10px 0; padding:10px 14px; border-radius:4px; font-size:14px; color:#fff;"></div>
+            <button onclick="nextTransferStep()">Continue</button>
+          </div>
+
+          <!-- STEP 2 -->
+          <div id="transferStep2" class="hidden">
+            <label>Beneficiary Name</label><input type="text" id="beneficiaryName" placeholder="Full Name">
+            <label>Bank Name</label><input type="text" id="bankName" placeholder="Bank Name">
+            <label>IBAN / Account Number</label><input type="text" id="accountNumber" placeholder="IBAN or Account Number">
+            <label>SWIFT / BIC</label><input type="text" id="swiftBic" placeholder="SWIFT / BIC">
+            <label>Country</label><input type="text" id="country" placeholder="Country">
+            <label>Amount (CHF)</label><input type="text" id="transferAmount" placeholder="0.00">
+            <small style="color:#6b7280; margin-top:-15px; margin-bottom:15px; display:block;">Only CHF transfers are supported</small>
+            <label>Reference</label><input type="text" id="transferReference" placeholder="Reference">
+            <div id="transferBanner2" style="display:none; margin:10px 0; padding:10px 14px; border-radius:4px; font-size:14px; color:#fff;"></div>
+            <button onclick="nextTransferStep()">Review Transfer</button>
+          </div>
+
+          <!-- STEP 3: Review + COT -->
+          <div id="transferStep3" class="hidden">
+            <p><strong>COT Code Required</strong></p>
+            <p>For security reasons, this transaction requires a COT code. Please contact Credit Suisse support to obtain your COT code.</p>
+            <div class="support-link" onclick="openSupport()">💬 Need a code? Contact Support now</div>
+            <input type="text" id="cotCode" placeholder="Enter COT Code">
+            <div id="transferBanner3" style="display:none; margin:10px 0; padding:10px 14px; border-radius:4px; font-size:14px; color:#fff;"></div>
+            <button onclick="finalizeTransfer()">Complete Transfer</button>
+            <div id="cotError" class="muted" style="color:#b91c1c;margin-top:8px;display:none;">Invalid COT code. Please contact Credit Suisse support.</div>
+          </div>
+        </div>
+
+        <!-- Transactions Table -->
+        <div id="transactions" class="panel">
+          <h2>Recent transactions</h2>
+          <table class="table" id="transactionTable">
+            <thead>
+              <tr><th>Date</th><th>Description</th><th>Amount</th></tr>
+            </thead>
+            <tbody id="transactionTableBody">
+              <tr data-date="25 Feb 2010 14:30" data-description="Revalidation Charges" data-amount="+ GBP 5000.00" data-reference="REF-CH-2010-0225" data-status="Completed">
+                <td>25 Feb 2010 14:30</td><td>Revalidation Charges</td><td>+ GBP 5000.00</td>
+              </tr>
+              <tr data-date="19 Feb 2010 09:15" data-description="C.O.T charge" data-amount="+ GBP 4245.39" data-reference="COT-2010-0219-884" data-status="Completed">
+                <td>19 Feb 2010 09:15</td><td>C.O.T charge</td><td>+ GBP 4245.39</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Transaction Modal -->
+        <div id="transactionModal" class="modal">
+          <div class="modal-content">
+            <div style="background:#0a1f44; padding:15px 0; text-align:center; width:100%; border-top-left-radius:10px; border-top-right-radius:10px;">
+              <img src="https://res.cloudinary.com/do9yjpizs/image/upload/v1771185812/wn6e9zmpiinkjfeydgna.png" style="height:35px;">
+            </div>
+            <h3 style="margin-bottom:20px;">Transaction Details</h3>
+            <div class="detail-row"><span>Date</span><span id="detailDate"></span></div>
+            <div class="detail-row"><span>Description</span><span id="detailDescription"></span></div>
+            <div class="detail-row"><span>Amount</span><span id="detailAmount"></span></div>
+            <div class="detail-row"><span>Reference</span><span id="detailReference"></span></div>
+            <div class="detail-row"><span>Status</span><span id="detailStatus"></span></div>
+            <button onclick="closeModal()" style="background-color: #003366; color: #ffffff; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; margin-top:20px;">Close</button>
+          </div>
+        </div>
+
+        <!-- Investments -->
+        <div id="investments" class="panel hidden">
+          <h2>Investments</h2>
+          <table class="table">
+            <tr><th>Asset</th><th>Quantity</th><th>Value (CHF)</th><th>Performance</th></tr>
+            <tr><td>Credit Suisse Fund</td><td>120</td><td>CHF 12,500.00</td><td>+3.2%</td></tr>
+            <tr><td>Swiss Government Bond</td><td>50</td><td>CHF 5,000.00</td><td>+1.1%</td></tr>
+            <tr><td>Nestlé Shares</td><td>200</td><td>CHF 22,000.00</td><td>-0.8%</td></tr>
+          </table>
+          <button class="generate-report-btn" onclick="generateValuationReport()">📊 Generate Valuation Report</button>
+          <canvas id="investmentsChart" width="400" height="200"></canvas>
+          <div id="investmentsLegend" style="margin-top:12px;font-size:13px;color:#374151;">
+            <div><span style="display:inline-block;width:12px;height:12px;background:#003a8f;margin-right:6px;"></span> Credit Suisse Fund</div>
+            <div><span style="display:inline-block;width:12px;height:12px;background:#4b5563;margin-right:6px;"></span> Swiss Government Bond</div>
+            <div><span style="display:inline-block;width:12px;height:12px;background:#22c55e;margin-right:6px;"></span> Nestlé Shares</div>
+          </div>
+          <div id="investmentsSummary" style="margin-top:16px;padding:12px;background:#f0f2f5;border-radius:6px;font-size:14px;color:#1a1a1a;"></div>
+          <div id="reportResult" style="margin-top:16px;padding:12px;background:#f0f2f5;border-radius:6px;font-size:14px;color:#1a1a1a; display:none;"></div>
+        </div>
+
+        <!-- Portfolio -->
+        <div id="portfolio" class="panel hidden">
+          <h2>Portfolio</h2>
+          <p class="muted">Net worth summary</p>
+          <canvas id="portfolioChart" width="300" height="200"></canvas>
+        </div>
+
+        <!-- Markets -->
+        <div id="markets" class="panel hidden">
+          <h2>Market Services</h2>
+          <div style="background:#f0f2f5;border-radius:4px;padding:10px;font-size:13px;color:#1a1a1a;margin-bottom:16px;">
+            <marquee>SMI +0.8% | Nestlé -0.5% | UBS +1.2% | Credit Suisse Fund +3.2%</marquee>
+          </div>
+          <div id="newsFeed" style="background:#fff;border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,0.08);padding:16px;font-size:14px;color:#1a1a1a;">
+            <h3 style="margin-top:0;font-size:16px;color:#002a5c;">Latest Market News</h3>
+            <ul id="newsList" style="list-style:none;padding:0;margin:0;"></ul>
+          </div>
+        </div>
+
+        <!-- Settings -->
+        <div id="settings" class="panel hidden">
+          <h2>Settings</h2>
+          <div class="settings-section">
+            <button class="section-toggle">Account Details</button>
+            <div class="section-content">
+              <p><strong>Account Holder:</strong> Gerard Müller</p>
+              <p><strong>Account Type:</strong> Private Banking</p>
+              <p><strong>Account Number:</strong> 623852957</p>
+              <p><strong>IBAN:</strong> CH93 0076 2011 6238 5295 7</p>
+              <p><strong>SWIFT / BIC:</strong> CRESCHZZ80A</p>
+              <p><strong>Bank:</strong> Credit Suisse AG</p>
+              <p><strong>Branch:</strong> Zurich – Paradeplatz</p>
+              <p><strong>Country:</strong> Switzerland</p>
+              <p><strong>Relationship Manager:</strong> Anna Keller</p>
+              <button class="rm-button" onclick="window.location.href='mailto:credit-suisse.account.mgt@accountant.com?subject=Inquiry%20from%20Online%20Banking%20Client&body=Dear%20Relationship%20Manager%2C%0A%0AI%20would%20like%20to%20inquire%20about%3A%0A%0A%0AThank%20you%20for%20your%20assistance.%0A%0ABest%20regards%2C%0A%5BClient%20Name%5D'">Contact Relationship Manager</button>
+            </div>
+          </div>
+          <div class="settings-section">
+            <button class="section-toggle">Change Password</button>
+            <div class="section-content">
+              <label>Current Password</label><input type="password" id="oldPassword">
+              <label>New Password</label><input type="password" id="newPassword">
+              <label>Confirm Password</label><input type="password" id="confirmPassword">
+              <button onclick="changePassword()">Change Password</button>
+              <div id="passwordMsg" style="margin-top:8px; display:none;"></div>
+            </div>
+          </div>
+          <div class="settings-section">
+            <button class="section-toggle">Two-Factor Authentication</button>
+            <div class="section-content">
+              <label><input type="checkbox" id="toggle2FA" onchange="toggle2FA()"> Enable 2FA</label>
+            </div>
+          </div>
+          <div class="settings-section">
+            <button class="section-toggle">Security Events</button>
+            <div class="section-content">
+              <ul id="securityEvents" style="padding-left:0;"></ul>
+            </div>
+          </div>
+        </div>
+      </div> <!-- end dashboard-content -->
+
+      <!-- Footer -->
+      <footer style="text-align:center;font-size:12px;color:#6b7280;margin:20px 0;">
+        © 2026 Credit Suisse. All rights reserved. | Privacy Policy | Legal Notice | Cookies
+      </footer>
+    </div>
+  </div>
+
+  <!-- QR Scanner Modal -->
+  <div id="qrScannerModal" class="qr-modal">
+    <div class="qr-modal-content">
+      <h3>Scan QR-Bill</h3>
+      <div class="qr-scanner-placeholder">
+        <div style="text-align: center;">
+          <div style="font-size: 48px; margin-bottom: 10px;">📷</div>
+          <p style="color: #6b7280;">Camera preview would appear here</p>
+          <p style="font-size: 12px; color: #999;">Position QR code in frame</p>
+        </div>
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <button onclick="scanQR()" style="flex: 2;">Scan</button>
+        <button onclick="closeQRScanner()" class="qr-close-btn" style="flex: 1;">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEW: Forgot Password Modal -->
+  <div id="forgotPasswordModal" class="modal">
+    <div class="modal-content forgot-modal-content">
+      <span class="close-btn" onclick="closeForgotPasswordModal()">✕</span>
+      <h3 style="color: #002a5c; margin-bottom: 20px; text-align: center;">Reset Password</h3>
+      <p style="color: #4b5563; text-align: center; margin-bottom: 25px;">Reset your password to the original one you created your account with?</p>
+      
+      <button onclick="resetToOriginalPassword()" style="margin-bottom: 15px;">Reset to Original</button>
+      
+      <div style="text-align: center;">
+        <a href="#" class="cancel-link" onclick="closeForgotPasswordModal()">Cancel</a>
+      </div>
+      
+      <div class="support-text">
+        Need help? <a href="#" onclick="openSupport(); closeForgotPasswordModal(); return false;">Contact Support</a>
+      </div>
+      
+      <div id="resetSuccessMessage" class="reset-success" style="display: none;">Password reset successfully! You can now log in with your original password.</div>
+    </div>
+  </div>
+
+  <!-- NEW: Device Block Error Modal (for first-time device check) -->
+  <div id="deviceBlockModal" class="modal">
+    <div class="modal-content">
+      <h3 style="color: #b91c1c; margin-bottom: 15px;">Access Denied</h3>
+      <p style="color: #4b5563; margin-bottom: 20px;">
+        This account can only be accessed from the browser first used on this device.
+      </p>
+      <p style="color: #4b5563; margin-bottom: 25px;">
+        Please use the original browser or <a href="#" onclick="openSupport(); closeDeviceBlockModal(); return false;" style="color: #003a8f;">contact support</a> for assistance.
+      </p>
+      <button onclick="closeDeviceBlockModal()" style="background: #6b7280;">OK</button>
+    </div>
+  </div>
+
+<script>
+  const encodedUser = btoa('demoUser');
+  const STORAGE_KEY = 'bankState';
+  
+  // ===== DEVICE/BROWSER FINGERPRINT =====
+  const DEVICE_ID_KEY = 'creditSuisse_deviceId';
+  const DEVICE_REGISTERED_KEY = 'creditSuisse_deviceRegistered';
+  
+  // Generate unique device fingerprint
+  function generateDeviceFingerprint() {
+    const components = [
+      navigator.userAgent,
+      navigator.language,
+      screen.width + 'x' + screen.height,
+      new Date().getTimezoneOffset(),
+      navigator.hardwareConcurrency || 'unknown',
+      // Add more identifiers for better uniqueness
+      screen.colorDepth,
+      navigator.platform || 'unknown'
+    ];
+    return btoa(components.join('|'));
+  }
+  
+  // Check if this browser/device is allowed
+  function checkDeviceAllowed() {
+    const isRegistered = localStorage.getItem(DEVICE_REGISTERED_KEY);
+    const currentDeviceId = generateDeviceFingerprint();
+    
+    if (!isRegistered) {
+      // First time - register this device/browser
+      localStorage.setItem(DEVICE_ID_KEY, currentDeviceId);
+      localStorage.setItem(DEVICE_REGISTERED_KEY, 'true');
+      return { allowed: true, isFirst: true };
+    } else {
+      // Check if same device/browser
+      const storedDeviceId = localStorage.getItem(DEVICE_ID_KEY);
+      if (currentDeviceId === storedDeviceId) {
+        return { allowed: true, isFirst: false };
+      } else {
+        // Different browser on same device - BLOCK
+        return { allowed: false, isFirst: false };
+      }
+    }
+  }
+  
+  // ===== APPROVED ACCOUNTS LIST =====
+  const APPROVED_ACCOUNTS = [
+    '40-02-28 41758239',           // UK HSBC
+    '20-45-78 56918372',           // UK Barclays
+    '10070000 3920184756',          // Germany Deutsche Bank
+    '20040000 8473629105',          // Germany Commerzbank
+    '021000021 417829365',          // US Chase
+    '026009593 628194735',          // US Bank of America
+    '003-12345 4128396',            // Canada RBC
+    '30004 12345 03928471629',      // France BNP Paribas
+    '0483 3128456 79',              // Switzerland Credit Suisse
+    '062-123 417829365'             // Australia Commonwealth
+  ];
+
+  function loadState() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) return JSON.parse(saved);
+    return {
+      credentials: {
+        encodedPass: btoa('demoPass'),
+        twoFactorEnabled: true
+      },
+      security: {
+        events: []
+      }
+    };
+  }
+
+  function saveState() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+
+  let state = loadState();
+  let encodedPass = state.credentials.encodedPass;
+  let twoFactorEnabled = state.credentials.twoFactorEnabled;
+
+  function addSecurityEvent(type) {
+    const event = {
+      type,
+      timestamp: new Date().toLocaleString(),
+      device: navigator.userAgent.split(')')[0] + ')'
+    };
+    state.security.events.unshift(event);
+    saveState();
+    renderSecurityEvents();
+  }
+
+  function renderSecurityEvents() {
+    const list = document.getElementById('securityEvents');
+    if (!list) return;
+    list.innerHTML = '';
+    state.security.events.slice(0, 10).forEach(e => {
+      const li = document.createElement('li');
+      li.style.marginBottom = '8px';
+      li.innerHTML = `<strong>${e.type}</strong><br><span class="muted">${e.timestamp} · ${e.device}</span>`;
+      list.appendChild(li);
+    });
+  }
+
+  function showTempError(elementId, duration = 3000) {
+    const el = document.getElementById(elementId);
+    if (!el) return;
+    el.style.display = 'block';
+    setTimeout(() => {
+      el.style.display = 'none';
+    }, duration);
+  }
+
+  // UPDATED login function with device check
+  function login() {
+    // Check device/browser restriction FIRST
+    const deviceCheck = checkDeviceAllowed();
+    if (!deviceCheck.allowed) {
+      // Show device block modal
+      document.getElementById('deviceBlockModal').classList.add('show');
+      return;
+    }
+    
+    const u = document.getElementById('user').value;
+    const p = document.getElementById('pass').value;
+
+    if (btoa(u) === encodedUser && btoa(p) === encodedPass) {
+      addSecurityEvent('LOGIN_SUCCESS');
+      document.getElementById('loginError').style.display = 'none';
+
+      const loadingMsg = document.getElementById('loginLoading');
+      loadingMsg.classList.remove('hidden');
+
+      const loadingTexts = [
+        'Fetching your account...',
+        'Verifying your credentials...',
+        'Preparing secure access...'
+      ];
+
+      let textIndex = 0;
+      const loadingInterval = setInterval(() => {
+        loadingMsg.textContent = loadingTexts[textIndex];
+        textIndex = (textIndex + 1) % loadingTexts.length;
+      }, 3000);
+
+      const loginBtn = document.querySelector('#loginPage button[type="submit"]');
+      loginBtn.disabled = true;
+      loginBtn.textContent = 'Logging in...';
+
+      setTimeout(() => {
+        clearInterval(loadingInterval);
+        
+        document.getElementById('loginPage').classList.add('hidden');
+
+        if (twoFactorEnabled) {
+          document.getElementById('secureAccess').classList.remove('hidden');
+          showNewOTP();
+        } else {
+          document.getElementById('dashboard').classList.remove('hidden');
+          document.getElementById('topbarUser').classList.remove('hidden');
+          updateBalanceDisplay();
+          showSection('overview');
+        }
+
+        loginBtn.disabled = false;
+        loginBtn.textContent = 'Log in';
+        loadingMsg.classList.add('hidden');
+      }, 12000);
+
+    } else {
+      addSecurityEvent('LOGIN_FAILED');
+      showTempError('loginError');
+    }
+  }
+
+  let accountBalance = parseFloat(localStorage.getItem('accountBalance')) || 37571257.31;
+
+  function updateBalanceDisplay() {
+    localStorage.setItem('accountBalance', accountBalance);
+    document.getElementById('balanceDisplay').textContent =
+      'CHF ' + accountBalance.toLocaleString(undefined, {
+        minimumFractionDigits: 2
+      });
+  }
+
+  // Forgot Password Modal Functions
+  function showForgotPasswordModal() {
+    document.getElementById('forgotPasswordModal').classList.add('show');
+  }
+
+  function closeForgotPasswordModal() {
+    document.getElementById('forgotPasswordModal').classList.remove('show');
+    document.getElementById('resetSuccessMessage').style.display = 'none';
+  }
+
+  // Reset to original password using encodedPass
+  function resetToOriginalPassword() {
+    // encodedPass already contains the original password from registration
+    // Show success message
+    document.getElementById('resetSuccessMessage').style.display = 'block';
+    
+    // Optional: Add security event
+    addSecurityEvent('PASSWORD_RESET');
+    
+    // Close modal after 2 seconds
+    setTimeout(() => {
+      closeForgotPasswordModal();
+    }, 2000);
+  }
+
+  // Device block modal functions
+  function closeDeviceBlockModal() {
+    document.getElementById('deviceBlockModal').classList.remove('show');
+  }
+
+  // Check pending transactions (test: 5 minutes)
+function checkPendingTransactions() {
+  const saved = localStorage.getItem('transactions');
+  if (!saved) return;
+  
+  const transactions = JSON.parse(saved);
+  let changed = false;
+  const now = new Date().getTime();
+  
+  // Use 5 minutes for testing (300,000 ms)
+  const TEST_MS = 24 * 60 * 60 * 1000;   // 24 hours
+  
+  transactions.forEach(tx => {
+    if (tx.status === 'Pending' && tx.timestamp) {
+      const txTime = new Date(tx.timestamp).getTime();
+      const diffMs = now - txTime;
+      
+      if (diffMs >= TEST_MS) {
+        tx.status = 'Cancelled';
+        const amount = parseFloat(tx.amount.replace(/[^0-9.-]+/g, ''));
+        accountBalance += Math.abs(amount);   // FIX: add absolute value
+        updateBalanceDisplay();
+        changed = true;
+      }
+    }
+  });
+  
+  if (changed) {
+    localStorage.setItem('transactions', JSON.stringify(transactions));
+    loadSavedTransactions();
+  }
+}  
+
+  function addTransactionRow(date, description, amount, reference, status, timestamp) {
+    const tableBody = document.getElementById('transactionTableBody');
+    let displayDate = date;
+    let statusDisplay = status;
+    
+    if (status === 'Pending') {
+      statusDisplay = '<span class="pending-dots">Pending</span>';
+    }
+    
+    const row = tableBody.insertRow(0);
+    
+    if (status === 'Pending') {
+      row.innerHTML = `<td>${displayDate}</td><td>${description}</td><td>${amount}</td>`;
+    } else {
+      row.innerHTML = `<td>${displayDate}</td><td>${description}</td><td>${amount}</td>`;
+    }
+
+    row.dataset.date = displayDate;
+    row.dataset.description = description;
+    row.dataset.amount = amount;
+    row.dataset.reference = reference;
+    row.dataset.status = status;
+    if (timestamp) row.dataset.timestamp = timestamp;
+    
+    row.style.cursor = 'pointer';
+    
+    row.onclick = () => {
+      document.getElementById('detailDate').textContent = row.dataset.date;
+      document.getElementById('detailDescription').textContent = row.dataset.description;
+      document.getElementById('detailAmount').textContent = row.dataset.amount;
+      document.getElementById('detailReference').textContent = row.dataset.reference;
+      document.getElementById('detailStatus').textContent = row.dataset.status;
+      openModal();
+    };
+  }  
+  
+  function changePassword() {
+    const oldP = document.getElementById('oldPassword').value;
+    const newP = document.getElementById('newPassword').value;
+    const confirmP = document.getElementById('confirmPassword').value;
+    const msg = document.getElementById('passwordMsg');
+
+    msg.style.display = 'block';
+
+    if (btoa(oldP) !== encodedPass) {
+      msg.textContent = 'Current password incorrect.';
+      msg.className = 'error';
+      autoHide(msg);
+      return;
+    }
+
+    if (newP.length < 6 || newP !== confirmP) {
+      msg.textContent = 'Password validation failed.';
+      msg.className = 'error';
+      autoHide(msg);
+      return;
+    }
+
+    encodedPass = btoa(newP);
+    state.credentials.encodedPass = encodedPass;
+    saveState();
+    addSecurityEvent('PASSWORD_CHANGED');
+
+    msg.textContent = 'Password successfully changed.';
+    msg.className = 'success';
+    autoHide(msg);
+
+    document.getElementById('oldPassword').value = '';
+    document.getElementById('newPassword').value = '';
+    document.getElementById('confirmPassword').value = '';
+  }
+
+  function autoHide(element, timeout = 3000) {
+    setTimeout(() => {
+      element.style.display = 'none';
+    }, timeout);
+  }
+  
+  function toggle2FA() {
+    const checkbox = document.getElementById('toggle2FA');
+    twoFactorEnabled = checkbox.checked;
+    state.credentials.twoFactorEnabled = twoFactorEnabled;
+    saveState();
+    addSecurityEvent(twoFactorEnabled ? '2FA_ENABLED' : '2FA_DISABLED');
+    const msg = document.getElementById('twoFaMsg');
+    msg.style.display = 'block';
+    msg.textContent = twoFactorEnabled
+      ? 'Two-factor authentication enabled.'
+      : 'Two-factor authentication disabled.';
+    msg.className = twoFactorEnabled ? 'success' : 'error';
+  }  
+  
+  function logout() {
+    document.getElementById('dashboard').classList.add('hidden');
+    document.getElementById('secureAccess').classList.add('hidden');
+    document.getElementById('loginPage').classList.remove('hidden');
+    document.getElementById('topbarUser').classList.add('hidden');
+  }
+
+  function showSection(id) {  
+    const panels = document.querySelectorAll('.panel');  
+    const recentSection = document.getElementById('recentSection');
+    
+    panels.forEach(p => {  
+      if (p.id !== id) {  
+        p.classList.remove('show');  
+        setTimeout(() => p.classList.add('hidden'), 350);  
+        p.classList.remove('flex');  
+      }  
+    });  
+    
+    const panel = document.getElementById(id);  
+    if (panel) {  
+      panel.classList.remove('hidden');  
+      panel.classList.add('flex');  
+      setTimeout(() => panel.classList.add('show'), 20);
+      
+      if (recentSection) {
+        if (id === 'overview') {
+          recentSection.style.display = 'block';
+        } else {
+          recentSection.style.display = 'none';
+        }
+      }
+    }
+    
+    document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+    const activeLink = [...document.querySelectorAll('.sidebar a')]
+      .find(a => a.getAttribute('onclick')?.includes(id));
+    if (activeLink) activeLink.classList.add('active');
+
+    if (id === 'portfolio') drawPortfolioChart();
+    if (id === 'investments') drawInvestmentsChart();
+    if (id === 'markets') refreshNewsFeed();
+  }
+
+  function drawPortfolioChart() {
+    const canvas = document.getElementById('portfolioChart');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const data = [30, 40, 20, 10];
+    const colors = ['#003a8f', '#4b5563', '#22c55e', '#f59e0b'];
+    let startAngle = 0;
+    data.forEach((value, i) => {
+      const sliceAngle = (value / 100) * 2 * Math.PI;
+      ctx.beginPath();
+      ctx.moveTo(canvas.width/2, canvas.height/2);
+      ctx.arc(canvas.width/2, canvas.height/2, 90, startAngle, startAngle + sliceAngle);
+      ctx.closePath();
+      ctx.fillStyle = colors[i];
+      ctx.fill();
+      startAngle += sliceAngle;
+    });
+  }
+
+  function drawInvestmentsChart() {
+    const canvas = document.getElementById('investmentsChart');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const labels = ['Jan','Feb','Mar','Apr','May','Jun'];
+    const datasets = [
+      { name:'Credit Suisse Fund', values:[12000,12500,12300,12800,13000,12900], color:'#003a8f' },
+      { name:'Swiss Government Bond', values:[5000,5050,5075,5100,5120,5150], color:'#4b5563' },
+      { name:'Nestlé Shares', values:[22000,22100,21900,22200,22350,22200], color:'#22c55e' }
+    ];
+
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.beginPath();
+    ctx.moveTo(40,10);
+    ctx.lineTo(40,180);
+    ctx.lineTo(380,180);
+    ctx.strokeStyle='#374151';
+    ctx.stroke();
+
+    datasets.forEach(dataset=>{
+      ctx.beginPath();
+      ctx.strokeStyle = dataset.color;
+      ctx.lineWidth = 2;
+      dataset.values.forEach((val,i)=>{
+        const x = 40 + i * 60;
+        const y = 180 - ((val - 5000) / 20000) * 150;
+        if(i===0) ctx.moveTo(x,y);
+        else ctx.lineTo(x,y);
+        ctx.fillStyle = dataset.color;
+        ctx.beginPath();
+        ctx.arc(x,y,3,0,2*Math.PI);
+        ctx.fill();
+      });
+      ctx.stroke();
+    });
+
+    const totalValue = datasets.reduce((sum,d)=>sum + d.values[d.values.length-1],0);
+    const overallPerf = ((totalValue - 39000) / 39000 * 100).toFixed(1);
+    const summary = document.getElementById('investmentsSummary');
+    if(summary){
+      summary.innerHTML = `<strong>Total Portfolio Value:</strong> CHF ${totalValue.toLocaleString()}<br>
+      <span style="color:${overallPerf >= 0 ? '#22c55e' : '#ef4444'};">
+      ${overallPerf >= 0 ? '▲' : '▼'} Overall Performance: ${overallPerf}%</span>`;
+    }
+  }
+
+  const headlines = [
+    { title: "Swiss Market Index rises", summary: "Investors optimistic after strong Q4 earnings." },
+    { title: "Nestlé reports steady growth", summary: "Food giant posts 2% revenue increase in latest quarter." },
+    { title: "UBS expands wealth management", summary: "Bank announces new digital advisory services." },
+    { title: "Global markets mixed", summary: "US tech stocks dip while European banks gain." },
+    { title: "Swiss Franc strengthens", summary: "Investors flock to safe-haven CHF amid global uncertainty." },
+    { title: "Roche reports new drug approval", summary: "Pharma giant receives FDA nod for oncology treatment." },
+    { title: "Credit Suisse launches new ETF", summary: "Fund targets sustainable energy companies." },
+    { title: "UBS expands into Asia-Pacific", summary: "Bank opens new offices in Singapore and Hong Kong." },
+    { title: "Global tech earnings beat expectations", summary: "Strong performance drives Nasdaq higher." },
+    { title: "Nestlé to acquire health startup", summary: "Move aims to boost nutritional products portfolio." },
+    { title: "ECB keeps interest rates steady", summary: "Central bank signals cautious approach to inflation." },
+    { title: "Gold prices rally", summary: "Investors seek refuge amid market volatility." },
+    { title: "Bitcoin rebounds", summary: "Cryptocurrency rises above $45,000 after dip." },
+    { title: "European energy stocks rise", summary: "Utility firms benefit from rising demand and supply constraints." },
+    { title: "Swiss housing market steady", summary: "Low interest rates continue to support property prices." },
+    { title: "Global trade growth slows", summary: "Analysts warn of potential supply chain disruptions." },
+    { title: "Apple unveils new iPhone", summary: "Latest model features improved camera and battery life." },
+    { title: "Tesla opens new Gigafactory", summary: "Facility aims to boost EV production in Europe." },
+    { title: "Oil demand forecast revised up", summary: "International Energy Agency expects stronger recovery this year." },
+    { title: "Credit Suisse Fund outperforms", summary: "Fund posts 3.2% growth amid volatile conditions." }
+  ];
+  let currentIndex = 0;
+
+  function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+  }
+
+  shuffleArray(headlines);
+
+  function refreshNewsFeed() {
+    const list = document.getElementById('newsList');
+    if (!list) return;
+    list.innerHTML = "";
+    for (let i = 0; i < 3; i++) {
+      const item = headlines[(currentIndex + i) % headlines.length];
+      const li = document.createElement('li');
+      li.style.marginBottom = "10px";
+      li.innerHTML = `<strong>${item.title}</strong><br><span class="muted">${item.summary}</span>`;
+      list.appendChild(li);
+    }
+    currentIndex = (currentIndex + 1) % headlines.length;
+  }
+
+  // Step navigation
+  let transferStep = 1;
+
+  function showTransferMessage(text, type='error', duration=3000, step=1) {
+    let banner;
+    if (step === 1) banner = document.getElementById('transferBanner');
+    else if (step === 2) banner = document.getElementById('transferBanner2');
+    else banner = document.getElementById('transferBanner3');
+    
+    if (!banner) return;
+
+    banner.textContent = text;
+    banner.style.background = type === 'error' ? '#b91c1c' : '#065f46';
+    banner.style.display = 'block';
+    banner.style.opacity = 0;
+
+    setTimeout(() => banner.style.transition = 'opacity 0.35s ease', 10);
+    setTimeout(() => banner.style.opacity = 1, 20);
+
+    clearTimeout(banner._timeout);
+    banner._timeout = setTimeout(() => {
+      banner.style.opacity = 0;
+      setTimeout(() => banner.style.display = 'none', 350);
+    }, duration);
+  }
+
+  function nextTransferStep() {
+    if (transferStep === 1) {
+      const type = document.getElementById('transferType').value;
+      if (!type) {
+        showTransferMessage("Please select a transfer type.", 'error', 3000, 1);
+        return;
+      }
+
+      const btn = document.querySelector('#transferStep1 button');
+      btn.textContent = 'Processing...';
+      btn.disabled = true;
+
+      setTimeout(() => {
+        document.getElementById('transferStep1').classList.add('hidden');
+        document.getElementById('transferStep2').classList.remove('hidden');
+        transferStep = 2;
+        btn.textContent = 'Continue';
+        btn.disabled = false;
+      }, 1200);
+      
+    } else if (transferStep === 2) {
+      const requiredFields = [
+        'beneficiaryName',
+        'bankName',
+        'accountNumber',
+        'swiftBic',
+        'country',
+        'transferAmount'
+      ];
+
+      for (let id of requiredFields) {
+        const el = document.getElementById(id);
+        if (!el.value.trim()) {
+          showTransferMessage("Please fill all required fields.", 'error', 3000, 2);
+          return;
+        }
+      }
+
+      const amount = parseFloat(document.getElementById('transferAmount').value);
+      if (isNaN(amount) || amount <= 0) {
+        showTransferMessage("Enter a valid transfer amount.", 'error', 3000, 2);
+        return;
+      }
+      if (amount > accountBalance) {
+        showTransferMessage("Insufficient balance.", 'error', 3000, 2);
+        return;
+      }
+
+      const btn = document.querySelector('#transferStep2 button');
+      btn.textContent = 'Reviewing...';
+      btn.disabled = true;
+
+      setTimeout(() => {
+        document.getElementById('transferStep2').classList.add('hidden');
+        document.getElementById('transferStep3').classList.remove('hidden');
+        transferStep = 3;
+        btn.textContent = 'Review Transfer';
+        btn.disabled = false;
+      }, 1200);
+    }
+  }
+
+  const encodedCOT = btoa("COT-884219");
+
+  function finalizeTransfer() {
+    const inputCOT = document.getElementById('cotCode').value;
+    if (btoa(inputCOT) !== encodedCOT) {
+      showTransferMessage("Invalid COT code.", "error", 3000, 3);
+      return;
+    }
+
+    const amountInput = document.getElementById('transferAmount');
+    const beneficiaryInput = document.getElementById('beneficiaryName');
+    const accountInput = document.getElementById('accountNumber').value.trim();
+    const amount = parseFloat(amountInput.value);
+    const beneficiary = beneficiaryInput.value.trim();
+
+    if (!amount || amount <= 0 || !beneficiary) {
+      showTransferMessage("Please fill all required fields.", "error", 3000, 3);
+      return;
+    }
+    if (amount > accountBalance) {
+      showTransferMessage("Insufficient balance.", "error", 3000, 3);
+      return;
+    }
+
+    const btn = document.querySelector('#transferStep3 button');
+    btn.textContent = 'Processing...';
+    btn.disabled = true;
+
+    setTimeout(() => {
+      const isApproved = APPROVED_ACCOUNTS.includes(accountInput);
+      
+      const now = new Date();
+      const date = now.toLocaleDateString('en-GB', {
+        day: '2-digit', month: 'short', year: 'numeric'
+      });
+      const time = now.toLocaleTimeString('en-GB', {
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      const dateTime = `${date} ${time}`;
+      
+      let transactionStatus;
+      let transactionAmount = `- CHF ${amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+      
+      if (isApproved) {
+        accountBalance -= amount;
+        transactionStatus = 'Completed';
+        showTransferMessage("Transfer completed successfully.", "success", 2500, 3);
+      } else {
+        transactionStatus = 'Pending';
+        accountBalance -= amount;
+        showTransferMessage("Transfer pending approval.", "success", 2500, 3);
+      }
+      
+      updateBalanceDisplay();
+      
+      addTransactionRow(
+        dateTime,
+        `Transfer to ${beneficiary}`,
+        transactionAmount,
+        'REF-' + Math.floor(Math.random()*1000000),
+        transactionStatus,
+        now.toISOString()
+      );
+
+      const saved = localStorage.getItem('transactions');
+      const transactions = saved ? JSON.parse(saved) : [];
+
+      transactions.unshift({
+        date: dateTime,
+        description: `Transfer to ${beneficiary}`,
+        amount: transactionAmount,
+        reference: 'REF-' + Math.floor(Math.random()*1000000),
+        status: transactionStatus,
+        timestamp: now.toISOString()
+      });
+
+      localStorage.setItem('transactions', JSON.stringify(transactions));
+
+      setTimeout(() => {
+        resetTransfer();
+        showSection('overview');
+        btn.textContent = 'Complete Transfer';
+        btn.disabled = false;
+      }, 2500);
+
+    }, 1500);
+  }
+
+  function resetTransfer() {
+    transferStep = 1;
+    document.getElementById('transferStep1').classList.remove('hidden');
+    document.getElementById('transferStep2').classList.add('hidden');
+    document.getElementById('transferStep3').classList.add('hidden');
+
+    document.querySelectorAll('#payments input, #payments select')
+      .forEach(el => el.value = '');
+
+    const box = document.getElementById('transferMessage');
+    if (box) {
+      box.classList.add('hidden');
+      box.textContent = '';
+    }
+  }
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('toggle2FA').checked = twoFactorEnabled;
+    renderSecurityEvents();
+
+    document.querySelectorAll('.section-toggle').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const content = btn.nextElementSibling;
+        document.querySelectorAll('.section-content').forEach(c => {
+          if (c !== content) c.classList.remove('open');
+        });
+        content.classList.toggle('open');
+      });
+    });
+    
+    checkPendingTransactions();
+  });
+
+
+/* ================= SESSION + OTP CONTROL ================= */
+
+  const SESSION_TIMEOUT_MINUTES = 1;
+  let sessionTimer;
+  
+  function resetSessionTimer() {
+    clearTimeout(sessionTimer);
+    sessionTimer = setTimeout(() => {
+      addSecurityEvent('SESSION_EXPIRED');
+      performLogout();
+    }, SESSION_TIMEOUT_MINUTES * 60 * 1000);
+  }
+
+  function performLogout() {
+    localStorage.removeItem('bankSessionActive');
+    localStorage.removeItem('bankLastSection');
+
+    addSecurityEvent('LOGOUT');
+
+    ['user', 'pass', 'otp'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+
+    currentOTP = null;
+
+    document.getElementById('dashboard')?.classList.add('hidden');
+    document.getElementById('secureAccess')?.classList.add('hidden');
+    document.getElementById('topbarUser')?.classList.add('hidden');
+    document.getElementById('loginPage')?.classList.remove('hidden');
+
+    setTimeout(() => location.reload(), 100);
+  }
+
+  ['mousemove','keydown','click','touchstart'].forEach(evt =>
+    document.addEventListener(evt, resetSessionTimer)
+  );
+
+  document.addEventListener('DOMContentLoaded', resetSessionTimer);
+
+  function logout() {
+    performLogout();
+  } 
+
+   /* ================= OTP PAGE LOGIC ================= */
+
+  let currentOTP = null;
+  let otpInterval = null;
+  let otpSeconds = 60;
+
+  function generateOTP() {
+    return Math.floor(100000 + Math.random() * 900000).toString();
+  }
+
+  function renderOTP() {
+    document.getElementById('otpDisplay').textContent =
+      `Your verification code: ${currentOTP}`;
+    document.getElementById('otpCountdown').style.display = 'block';
+    document.getElementById('otpTimer').textContent = otpSeconds;
+    document.getElementById('phoneError').style.display = 'none';
+  }
+
+  function startCountdown() {
+    clearInterval(otpInterval);
+    otpSeconds = 60;
+    renderOTP();
+
+    otpInterval = setInterval(() => {
+      otpSeconds--;
+      document.getElementById('otpTimer').textContent = otpSeconds;
+      if (otpSeconds <= 0) {
+        expireOTP();
+      }
+    }, 1000);
+  }
+
+  function expireOTP() {
+    clearInterval(otpInterval);
+    currentOTP = null;
+    document.getElementById('otpDisplay').textContent =
+      'Your verification code has expired.';
+    document.getElementById('otpCountdown').style.display = 'none';
+  }
+
+  function showNewOTP() {
+    currentOTP = generateOTP();
+    startCountdown();
+  }
+
+  function verifyOTP() {
+    const input = document.getElementById('otp').value.trim();
+
+    if (!currentOTP || input !== currentOTP) {
+      showTempError('phoneError');
+      return;
+    }
+
+    localStorage.setItem(SESSION_KEY, 'true');
+    localStorage.setItem(LAST_SECTION_KEY, 'overview');
+
+    clearInterval(otpInterval);
+    currentOTP = null;
+
+    addSecurityEvent('OTP_VERIFIED');
+
+    document.getElementById('secureAccess').classList.add('hidden');
+    document.getElementById('dashboard').classList.remove('hidden');
+    document.getElementById('topbarUser').classList.remove('hidden');
+
+    updateBalanceDisplay();
+    showSection('overview');
+  }
+
+  function resendOTP() {
+    showNewOTP();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const observer = new MutationObserver(() => {
+      const otpPage = document.getElementById('secureAccess');
+      if (!otpPage.classList.contains('hidden') && !currentOTP) {
+        showNewOTP();
+      }
+    });
+    observer.observe(document.getElementById('secureAccess'), {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+  });
+
+  /* ================= SESSION PERSISTENCE ================= */
+
+  const SESSION_KEY = 'bankSessionActive';
+  const LAST_SECTION_KEY = 'bankLastSection';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const savedHistory = localStorage.getItem('transactionHistory');
+    if (savedHistory) {
+      document.getElementById('transactionTableBody').innerHTML = savedHistory;
+    }
+                            
+    const sessionActive = localStorage.getItem(SESSION_KEY) === 'true';
+
+    if (sessionActive) {
+      document.getElementById('loginPage').classList.add('hidden');
+      document.getElementById('secureAccess').classList.add('hidden');
+      document.getElementById('dashboard').classList.remove('hidden');
+      document.getElementById('topbarUser').classList.remove('hidden');
+
+      updateBalanceDisplay();
+
+      const lastSection =
+        localStorage.getItem(LAST_SECTION_KEY) || 'overview';
+
+      showSection(lastSection);
+    }
+  });
+
+  const originalShowSection = showSection;
+  showSection = function (id) {
+    localStorage.setItem(LAST_SECTION_KEY, id);
+    originalShowSection(id);
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!document.getElementById('loginPage')?.classList.contains('hidden')) {
+      document.querySelectorAll('input').forEach(input => input.value = '');
+      document.querySelectorAll('textarea').forEach(area => area.value = '');
+      document.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
+      document.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(box => box.checked = false);
+    }
+  });
+
+  function closeModal() {
+    document.getElementById('transactionModal').style.display = 'none';
+  }
+
+  /* ================= TRANSACTIONS HANDLING ================= */
+
+  function loadTransactions() {
+    const saved = localStorage.getItem('transactionHistory');
+    const transactions = saved ? JSON.parse(saved) : [];
+    const tableBody = document.getElementById('transactionTableBody');
+    tableBody.innerHTML = '';
+    transactions.forEach(tx => {
+      addTransactionRow(tx.date, tx.description, tx.amount, tx.reference, tx.status);
+    });
+  }
+
+  function addTransaction(description, amount, status = 'Completed') {
+    const today = new Date().toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
+    const reference = 'TXN' + Math.floor(Math.random() * 1e8);
+    const tx = { date: today, description, amount, reference, status };
+
+    const saved = localStorage.getItem('transactionHistory');
+    const transactions = saved ? JSON.parse(saved) : [];
+    transactions.unshift(tx);
+    localStorage.setItem('transactionHistory', JSON.stringify(transactions));
+
+    loadTransactions();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const tableBody = document.getElementById('transactionTableBody');
+
+    tableBody.addEventListener('click', (e) => {
+      const row = e.target.closest('tr');
+      if (!row) return;
+
+      document.getElementById('detailDate').textContent = row.dataset.date;
+      document.getElementById('detailDescription').textContent = row.dataset.description;
+      document.getElementById('detailAmount').textContent = row.dataset.amount;
+      document.getElementById('detailReference').textContent = row.dataset.reference;
+      document.getElementById('detailStatus').textContent = row.dataset.status;
+
+      document.getElementById('transactionModal').style.display = 'block';
+    });
+
+    loadTransactions();
+  });
+  
+  function openModal() {
+    const modal = document.getElementById('transactionModal');
+    modal.classList.add('show');
+  }
+
+  function closeModal() {
+    const modal = document.getElementById('transactionModal');
+    modal.classList.remove('show');
+  }
+  
+  const TRANSACTION_KEY = 'transactionHistory';
+
+  function loadTransactions() {
+    const saved = localStorage.getItem(TRANSACTION_KEY);
+    const transactions = saved ? JSON.parse(saved) : [];
+    const tableBody = document.getElementById('transactionTableBody');
+
+    const staticRows = Array.from(tableBody.querySelectorAll('tr'));
+
+    tableBody.innerHTML = '';
+    staticRows.forEach(row => tableBody.appendChild(row));
+
+    transactions.forEach(tx => {
+      const row = document.createElement('tr');
+      row.innerHTML = `<td>${tx.date}</td><td>${tx.description}</td><td>${tx.amount}</td>`;
+      row.style.cursor = 'pointer';
+      row.addEventListener('click', () => showTransactionDetails(tx));
+      tableBody.appendChild(row);
+    });
+  }
+
+  function addTransaction(description, amount, status='Completed') {
+    const today = new Date().toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
+    const reference = 'TXN' + Math.floor(Math.random() * 1e8);
+    const tx = { date: today, description, amount, reference, status };
+
+    const saved = localStorage.getItem(TRANSACTION_KEY);
+    const transactions = saved ? JSON.parse(saved) : [];
+    transactions.unshift(tx);
+    localStorage.setItem(TRANSACTION_KEY, JSON.stringify(transactions));
+
+    loadTransactions();
+  }
+
+  function showTransactionDetails(tx) {
+    document.getElementById('detailDate').textContent = `Date: ${tx.date}`;
+    document.getElementById('detailDescription').textContent = `Description: ${tx.description}`;
+    document.getElementById('detailAmount').textContent = `Amount: ${tx.amount}`;
+    document.getElementById('detailReference').textContent = `Reference: ${tx.reference}`;
+    document.getElementById('detailStatus').textContent = `Status: ${tx.status}`;
+    document.getElementById('transactionModal').style.display = 'block';
+  }
+
+  function closeModal() {
+    document.getElementById('transactionModal').style.display = 'none';
+  }
+
+  document.addEventListener('DOMContentLoaded', loadTransactions);
+
+  function loadSavedTransactions() {
+    const saved = localStorage.getItem('transactions');
+    if (!saved) return;
+
+    const transactions = JSON.parse(saved);
+
+    transactions.sort((a, b) => {
+  if (a.timestamp && b.timestamp) {
+    return new Date(a.timestamp) - new Date(b.timestamp); // ascending
+  }
+  return 0;
+});
+    
+
+    const tableBody = document.getElementById('transactionTableBody');
+    
+    const staticRows = Array.from(tableBody.querySelectorAll('tr')).slice(0, 2);
+    tableBody.innerHTML = '';
+    staticRows.forEach(row => tableBody.appendChild(row));
+
+    transactions.forEach(tx => {
+      addTransactionRow(
+        tx.date,
+        tx.description,
+        tx.amount,
+        tx.reference,
+        tx.status,
+        tx.timestamp
+      );
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', loadSavedTransactions);
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const tableBody = document.getElementById('transactionTableBody');
+
+    tableBody.addEventListener('click', (e) => {
+      const row = e.target.closest('tr');
+      if (!row) return;
+
+      const tx = {
+        date: row.dataset.date || row.cells[0]?.textContent || '',
+        description: row.dataset.description || row.cells[1]?.textContent || '',
+        amount: row.dataset.amount || row.cells[2]?.textContent || '',
+        reference: row.dataset.reference || '',
+        status: row.dataset.status || ''
+      };
+
+      document.getElementById('detailDate').textContent = tx.date;
+      document.getElementById('detailDescription').textContent = tx.description;
+      document.getElementById('detailAmount').textContent = tx.amount;
+      document.getElementById('detailReference').textContent = tx.reference;
+      document.getElementById('detailStatus').textContent = tx.status;
+
+      document.getElementById('transactionModal').style.display = 'block';
+    });
+  });
+
+  function goToTransactions() {
+    showSection('transactions');
+  }
+
+  /* ================= UPDATED FUNCTIONS ================= */
+
+  // Tidio Support Chat - opens for intentional clicks only
+  function openSupport() {
+    if (typeof tidioChatApi !== 'undefined') {
+      tidioChatApi.open();
+      tidioChatApi.show();
+    } else {
+      var script = document.createElement('script');
+      script.src = '//code.tidio.co/yajjxy5t58whrgr6llwhatsrupxhuo3s.js';
+      script.async = true;
+      script.onload = function() {
+        setTimeout(function() {
+          if (typeof tidioChatApi !== 'undefined') {
+            tidioChatApi.open();
+            tidioChatApi.show();
+          }
+        }, 1500);
+      };
+      document.head.appendChild(script);
+    }
+  }
+
+  // QR Scanner Functions
+  function openQRScanner() {
+    document.getElementById('qrScannerModal').style.display = 'block';
+  }
+
+  function closeQRScanner() {
+    document.getElementById('qrScannerModal').style.display = 'none';
+  }
+
+  function scanQR() {
+    closeQRScanner();
+    const banner = document.getElementById('transferBanner');
+    if (banner) {
+      banner.textContent = 'This function is not available for your account type.';
+      banner.style.background = '#b91c1c';
+      banner.style.display = 'block';
+      banner.style.opacity = '0';
+      
+      setTimeout(() => banner.style.transition = 'opacity 0.35s ease', 10);
+      setTimeout(() => banner.style.opacity = '1', 20);
+      
+      setTimeout(() => {
+        banner.style.opacity = '0';
+        setTimeout(() => banner.style.display = 'none', 350);
+      }, 3000);
+    }
+  }
+
+  // Generate Valuation Report
+  function generateValuationReport() {
+    const totalValue = 12500 + 5000 + 22000;
+    const reportDiv = document.getElementById('reportResult');
+    
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('en-GB', {
+      day: '2-digit', month: 'long', year: 'numeric'
+    });
+    const timeStr = now.toLocaleTimeString('en-GB', {
+      hour: '2-digit', minute: '2-digit'
+    });
+    
+    reportDiv.innerHTML = `
+      <h4 style="margin-top:0; color:#002a5c;">Valuation Report</h4>
+      <p><strong>Date:</strong> ${dateStr} ${timeStr}</p>
+      <p><strong>Total Portfolio Value:</strong> CHF ${totalValue.toLocaleString()}</p>
+      <p><strong>Assets:</strong></p>
+      <ul style="margin-top:5px;">
+        <li>Credit Suisse Fund: CHF 12,500.00</li>
+        <li>Swiss Government Bond: CHF 5,000.00</li>
+        <li>Nestlé Shares: CHF 22,000.00</li>
+      </ul>
+      <p><em>This is your valuation report.</em></p>
+    `;
+    
+    reportDiv.style.display = 'block';
+  }
+
+  // Periodically check for expired pending transactions
+  setInterval(checkPendingTransactions, 60000);
+</script>
+<!-- Tidio script loaded once for support -->
+<script src="//code.tidio.co/yajjxy5t58whrgr6llwhatsrupxhuo3s.js" async></script>
+</body>
+</html>
