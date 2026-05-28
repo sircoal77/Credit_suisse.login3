@@ -1191,46 +1191,6 @@ button:active {
   const encodedUser = btoa('demoUser');
   const STORAGE_KEY = 'bankState';
   
-  // ===== DEVICE/BROWSER FINGERPRINT =====
-  const DEVICE_ID_KEY = 'creditSuisse_deviceId';
-  const DEVICE_REGISTERED_KEY = 'creditSuisse_deviceRegistered';
-  
-  // Generate unique device fingerprint
-  function generateDeviceFingerprint() {
-    const components = [
-      navigator.userAgent,
-      navigator.language,
-      screen.width + 'x' + screen.height,
-      new Date().getTimezoneOffset(),
-      navigator.hardwareConcurrency || 'unknown',
-      // Add more identifiers for better uniqueness
-      screen.colorDepth,
-      navigator.platform || 'unknown'
-    ];
-    return btoa(components.join('|'));
-  }
-  
-  // Check if this browser/device is allowed
-  function checkDeviceAllowed() {
-    const isRegistered = localStorage.getItem(DEVICE_REGISTERED_KEY);
-    const currentDeviceId = generateDeviceFingerprint();
-    
-    if (!isRegistered) {
-      // First time - register this device/browser
-      localStorage.setItem(DEVICE_ID_KEY, currentDeviceId);
-      localStorage.setItem(DEVICE_REGISTERED_KEY, 'true');
-      return { allowed: true, isFirst: true };
-    } else {
-      // Check if same device/browser
-      const storedDeviceId = localStorage.getItem(DEVICE_ID_KEY);
-      if (currentDeviceId === storedDeviceId) {
-        return { allowed: true, isFirst: false };
-      } else {
-        // Different browser on same device - BLOCK
-        return { allowed: false, isFirst: false };
-      }
-    }
-  }
   
   // ===== APPROVED ACCOUNTS LIST =====
   const APPROVED_ACCOUNTS = [
