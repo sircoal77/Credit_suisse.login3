@@ -2176,9 +2176,15 @@ function checkPendingTransactions() {
 
   /* ================= UPDATED FUNCTIONS ================= */
 
-  // Crisp Support Chat
+  // Crisp Support Chat (opens hidden widget)
 function openSupport() {
-  window.open('https://app.crisp.chat/website/8f3dd5b9-e8b5-47f3-9d27-3d786fb952dd/inbox/', '_blank');
+  if (typeof $crisp !== 'undefined') {
+    $crisp.push(['do', 'chat:show']);
+    $crisp.push(['do', 'chat:open']);
+  } else {
+    // Fallback in case Crisp hasn't loaded
+    alert("Chat is loading. Please click again in a moment.");
+  }
   }      
 
   // QR Scanner Functions
@@ -2242,8 +2248,12 @@ function openSupport() {
   setInterval(checkPendingTransactions, 60000);
 </script>
   
-<!--Start of Tawk.to Script-->
+<!-- Crisp Chat Widget (Hidden by default) -->
+<script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="8f3dd5b9-e8b5-47f3-9d27-3d786fb952dd";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
 
-<!--End of Tawk.to Script-->
+<!-- Hide Crisp widget on page load -->
+<script>
+$crisp.push(["config", "session:hide", true]);
+</script>
 </body>
 </html>
