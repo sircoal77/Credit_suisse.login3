@@ -2176,26 +2176,14 @@ function checkPendingTransactions() {
 
   /* ================= UPDATED FUNCTIONS ================= */
 
-  // Tidio Support Chat - opens for intentional clicks only
-  function openSupport() {
-    if (typeof tidioChatApi !== 'undefined') {
-      tidioChatApi.open();
-      tidioChatApi.show();
-    } else {
-      var script = document.createElement('script');
-      script.src = '//code.tidio.co/yajjxy5t58whrgr6llwhatsrupxhuo3s.js';
-      script.async = true;
-      script.onload = function() {
-        setTimeout(function() {
-          if (typeof tidioChatApi !== 'undefined') {
-            tidioChatApi.open();
-            tidioChatApi.show();
-          }
-        }, 1500);
-      };
-      document.head.appendChild(script);
-    }
+  // Tawk.to Support Chat
+function openSupport() {
+  if (typeof Tawk_API !== 'undefined') {
+    Tawk_API.toggle();
+  } else {
+    alert("Chat is loading. Please wait a moment and try again.");
   }
+}      
 
   // QR Scanner Functions
   function openQRScanner() {
@@ -2257,7 +2245,19 @@ function checkPendingTransactions() {
   // Periodically check for expired pending transactions
   setInterval(checkPendingTransactions, 60000);
 </script>
-<!-- Tidio script loaded once for support -->
-<script src="//code.tidio.co/kjewq1luj1tixrxx1drxmqiqs6lwp6x9.js" async></script>
+  
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/6a193a70dfbac81c335d6e1b/default';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
 </body>
 </html>
